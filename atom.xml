@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>/Users/icourt/github/smile/output</id>
+    <id>https://whj768702.github.io/smile/</id>
     <title>Gridea</title>
-    <updated>2019-06-28T11:08:46.467Z</updated>
+    <updated>2019-06-28T11:16:45.378Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="/Users/icourt/github/smile/output"/>
-    <link rel="self" href="/Users/icourt/github/smile/output/atom.xml"/>
+    <link rel="alternate" href="https://whj768702.github.io/smile/"/>
+    <link rel="self" href="https://whj768702.github.io/smile//atom.xml"/>
     <subtitle>温故而知新</subtitle>
-    <logo>/Users/icourt/github/smile/output/images/avatar.png</logo>
-    <icon>/Users/icourt/github/smile/output/favicon.ico</icon>
+    <logo>https://whj768702.github.io/smile//images/avatar.png</logo>
+    <icon>https://whj768702.github.io/smile//favicon.ico</icon>
     <rights>All rights reserved 2019, Gridea</rights>
     <entry>
         <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>/Users/icourt/github/smile/output/post/hello-gridea/index.html</id>
-        <link href="/Users/icourt/github/smile/output/post/hello-gridea/index.html">
+        <id>https://whj768702.github.io/smile//post/hello-gridea</id>
+        <link href="https://whj768702.github.io/smile//post/hello-gridea">
         </link>
         <updated>2018-12-11T16:00:00.000Z</updated>
         <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
