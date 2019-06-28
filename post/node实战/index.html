@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>node实战 | smile</title>
+<meta name="description" content="记录时光">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://whj768702.github.io/smile//favicon.ico?v=1561721604760">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://whj768702.github.io/smile//styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://whj768702.github.io/smile/">
+        <img src="https://whj768702.github.io/smile//images/avatar.png?v=1561721604760" class="site-logo">
+        <h1 class="site-title">smile</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      记录时光
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://whj768702.github.io/smile//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">node实战</h2>
+            <div class="post-date">2019-06-23</div>
+            
+            <div class="post-content">
+              <h3 id="第一章-了解node">第一章 了解Node</h3>
+<ul>
+<li><strong>Node</strong>是用来搭建<strong>JavaScript</strong>应用程序的平台，有基于事件和非阻塞的特性。</li>
+<li><strong>V8</strong>被用作<strong>JavaScript</strong>运行时。</li>
+<li><strong>libuv</strong>是提供快速、跨平台、非阻塞<strong>I/O</strong>的本地库。</li>
+<li>被称为核心模块的<strong>Node</strong>标准库很精巧，为<strong>JavaScript</strong>添加了磁盘<strong>I/O</strong>。</li>
+<li><strong>Node</strong>自带了一个调试器和一个依赖管理器(npm)。</li>
+<li><strong>Node</strong>可以用于搭建Web应用程序、命令行工具，甚至桌面程序。</li>
+</ul>
+<h3 id="第二章-node编程基础">第二章 Node编程基础</h3>
+<ol>
+<li>
+<h4 id="模块化">模块化</h4>
+<p><strong>Node</strong>以不同的方式寻找模块，定位到这个模块并加载文件中的内容，查找顺序是核心模块-&gt;当前目录-&gt;node_modules</p>
+</li>
+<li>
+<p>异步编程技术<br>
+<strong>Node</strong>的世界里流行两种响应逻辑管理方式：回调和事件监听。</p>
+<ul>
+<li>
+<p>用回调处理一次性事件<br>
+回调是一个函数，它被当做参数传给异步函数，用来描述异步操作完成之后要做什么。</p>
+<pre><code class="language-javascript">const fs = require('fs');
+fs.readFile('./title.json', (err, data) =&gt; {
+  if (err) throw err;
+});
+// (err, data) =&gt;{}
+</code></pre>
+</li>
+<li>
+<p>用事件发射器处理重复事件<br>
+使用<code>on</code>方法响应事件</p>
+<pre><code class="language-javascript">const net = require('net');
+const server = net.createServer(socket =&gt; {
+  socket.on('data', data =&gt; {
+    socket.write(data);
+  });
+});
+server.listen(8888);
+</code></pre>
+<p>响应只应该发生一次的事件</p>
+<pre><code class="language-javascript">const net = require('net');
+const server = net.createServer(socket =&gt; {
+  socket.on('data', data =&gt; {
+    socket.once(data);
+  });
+});
+server.listen(8888);
+</code></pre>
+<p>创建一个发射器</p>
+<pre><code class="language-javascript">const EventEmitter = require('events').EventEmitter;
+const channel = new EventEmitter();
+channel.on('join', () =&gt; {
+  console.log('welcome');
+});
+setTimeout(() =&gt; {
+  channel.emit('join');
+}, 3000);
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p>异步逻辑的顺序化</p>
+<ul>
+<li>
+<p>串行化流程控制<br>
+完成一个任务后，执行下一个。</p>
+</li>
+<li>
+<p>并行化流程控制</p>
+<p>不需要一个接着一个执行。</p>
+</li>
+<li>
+<p>社区里的工具<br>
+<strong>Async</strong> <strong>Step</strong> <strong>Seq</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>总结</p>
+<ul>
+<li><strong>Node</strong>模块可以被组织成可重用的模块</li>
+<li><strong>require</strong>函数是用来加载模块的</li>
+<li><strong>module.exports</strong>和<strong>exports</strong>对象是用来分享模块内的函数和变量的</li>
+<li><strong>package.json</strong>文件是用来指明依赖项的，还要指明将哪个文件作为主文件</li>
+<li>异步逻辑可以用嵌套回调、事件发射器和流程控制工具来控制</li>
+</ul>
+</li>
+</ol>
+<h3 id="第三章-node-web程序">第三章 Node Web程序</h3>
+<ol>
+<li>
+<p><strong>Node Web</strong>程序的结构</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">package.json</th>
+<th>包含依赖项列表和运行这个程序的命令的文件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">public</td>
+<td>静态资源文件夹，CSS和客户端JavaScript都放在这里</td>
+</tr>
+<tr>
+<td style="text-align:center">node_modules</td>
+<td>项目的依赖项都装到这里</td>
+</tr>
+<tr>
+<td style="text-align:center">放程序代码的目录</td>
+<td>1. app.js或index.js—设置程序的代码<br />2. models--数据库模型<br />3. views--用来渲染页面的模板<br />4. controllers或routes--HTTP请求处理器<br />5. middleware--中间件组件</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://whj768702.github.io/smile//tag/node" class="tag">
+                    node
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://whj768702.github.io/smile//post/Promise详解">
+                  <h3 class="post-title">
+                    Promise详解
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>

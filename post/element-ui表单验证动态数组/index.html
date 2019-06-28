@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>element-ui表单验证动态数组 | smile</title>
+<meta name="description" content="记录时光">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://whj768702.github.io/smile//favicon.ico?v=1561721604760">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://whj768702.github.io/smile//styles/main.css">
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://whj768702.github.io/smile/">
+        <img src="https://whj768702.github.io/smile//images/avatar.png?v=1561721604760" class="site-logo">
+        <h1 class="site-title">smile</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      记录时光
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://whj768702.github.io/smile//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">element-ui表单验证动态数组</h2>
+            <div class="post-date">2019-06-20</div>
+            
+            <div class="post-content">
+              <p>最近做项目，使用了element-ui框架，业务中有部分自定义表单，需要动态生成数组元素，验证数组中的值。在此做下记录。</p>
+<p>html部分，重要的是<code>props</code>那块的写法<code>:prop=&quot;'optionsValue.'+index+'.value'&quot;</code></p>
+<pre><code class="language-vue">&lt;el-form ref=&quot;optionsForm&quot; size=&quot;small&quot; :model=&quot;objectTypeOptions&quot;&gt;
+			&lt;div v-for=&quot;(item, index) in objectTypeOptions.optionsValue&quot; :key=&quot;item.id&quot;&gt;
+				&lt;el-form-item :prop=&quot;'optionsValue.'+index+'.value'&quot; :rules=&quot;{trigger: 'change', value: objectTypeOptions.optionsValue, validator: validatorOptions}&quot;&gt;
+					&lt;el-input v-model=&quot;item.value&quot;&gt;
+						&lt;el-button slot=&quot;append&quot; @click=&quot;deleteOption(index)&quot;&gt;删除&lt;/el-button&gt;
+					&lt;/el-input&gt;
+				&lt;/el-form-item&gt;
+			&lt;/div&gt;
+			&lt;span @click=&quot;addOption&quot;&gt;增加&lt;/span&gt;
+      &lt;el-form-item&gt;
+        &lt;el-button @click=&quot;submit&quot;&gt;保存&lt;/el-button&gt;
+      &lt;/el-form-item&gt;
+    &lt;/el-form&gt;
+</code></pre>
+<p>js部分</p>
+<pre><code class="language-javascript">var app = new Vue({
+  el: '#app',
+  data: {
+    optionsForm: {
+      options: '',
+    },
+    objectTypeOptions: {
+      optionsValue: [],
+    },
+  },
+  methods: {
+    validatorOptions(rule, value, callback) {
+      if (!value) {
+        callback(new Error('选项不能为空'));
+      } else if (rule.value.filter(item =&gt; item.value === value).length &gt; 1) {
+        callback(new Error('重复值'));
+      } else {
+        callback();
+      }
+    },
+    addOption() {
+      this.objectTypeOptions.optionsValue.push({
+        id: 'key' + this.objectTypeOptions.optionsValue.length,
+        value: '',
+      });
+    },
+    deleteOption(index) {
+      this.objectTypeOptions.optionsValue.splice(index, 1);
+    },
+    submit() {
+      this.$refs.optionsForm.validate(valid =&gt; {
+        if (valid) {
+          this.objectTypeOptions.optionsValue.map(item =&gt; {
+            this.configuration.props.options.push(item.value);
+          });
+          this.informationValidated = true;
+        } else {
+          this.informationValidated = false;
+          return false;
+        }
+      });
+    },
+  },
+});
+</code></pre>
+<p><a href="https://next.plnkr.co/edit/fSiDv1AeEY6zDxhZ?preview">线上运行demo</a></p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://whj768702.github.io/smile//tag/vue" class="tag">
+                    vue
+                  </a>
+                
+                  <a href="https://whj768702.github.io/smile//tag/element-ui" class="tag">
+                    element-ui
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://whj768702.github.io/smile//post/记录">
+                  <h3 class="post-title">
+                    记录
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+  </body>
+</html>
